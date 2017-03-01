@@ -117,9 +117,7 @@ class Post implements \Serializable
         return serialize(array(
             $this->id,
             $this->user_id,
-            $this->body,
-            $this->created_at,
-            $this->updated_at
+            $this->body
         ));
     }
 

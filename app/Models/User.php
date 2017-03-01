@@ -155,9 +155,10 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Post created_at mutator
+     * User created_at mutator
+     * @param \DateTime $created_at
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt(\DateTime $created_at)
     {
         $this->created_at = $created_at;
     }
@@ -171,9 +172,10 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Post updated_at mutator
+     * User updated_at mutator
+     * @param \DateTime $update_at
      */
-    public function setUpdatedAt($updated_at)
+    public function setUpdatedAt(\DateTime $updated_at)
     {
         $this->updated_at = $updated_at;
     }
