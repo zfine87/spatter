@@ -1,7 +1,9 @@
 <?php namespace App;
 
+use App\Subscriber\TimestampSubscriber;
 use Silex;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Doctrine\ORM\Events;
 use Silex\Provider\FormServiceProvider;
 
 class Application extends Silex\Application {
@@ -47,6 +49,7 @@ class Application extends Silex\Application {
             )
         ));
 
+        $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
 
         //Register general use service providers
         $this->register(new Silex\Provider\LocaleServiceProvider());
@@ -55,7 +58,6 @@ class Application extends Silex\Application {
             'translator.domains' => array(),
         ));
         $this->register(new FormServiceProvider());
-        $this->register(new Silex\Provider\VarDumperServiceProvider());
         $this->register(new Silex\Provider\SessionServiceProvider());
 
 
@@ -90,12 +92,10 @@ class Application extends Silex\Application {
             ]
         );
 
-
         //Encode user passwords with Bcrypt
         $this['security.password_encoder'] = function ($this) {
             return $this['security.encoder.bcrypt'];
         };
-
 
         //Register Twig view folder/provider
         $this->register(new Silex\Provider\TwigServiceProvider(), array(

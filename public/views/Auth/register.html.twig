@@ -1,12 +1,25 @@
+{% form_theme form 'form/fields.html.twig' %}
+
 {% extends "app.html.twig" %}
 
 
 {% block content %}
-    {{ form_start(form) }}
-        {{ form_row(form.username) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.plainPassword.first) }}
-        {{ form_row(form.plainPassword.second) }}
-    <button type="submit">Register!</button>
-    {{ form_end(form) }}
+    <div class="d-flex flex-column align-items-center">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="card m-auto" style="width:250px;">
+            <div class="card-block">
+                {{ form_row(form.username) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.plainPassword.first) }}
+                {{ form_row(form.plainPassword.second) }}
+                <button type="submit">Register!</button>
+
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+
+
 {%  endblock %}

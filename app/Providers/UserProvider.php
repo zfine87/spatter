@@ -21,7 +21,7 @@ class UserProvider implements UserProviderInterface
 
         $stmt = $this->conn->createQuery('select u from App\Models\User u where u.username = :name')->setParameter('name', strtolower($username));
 
-        if (!$user = $stmt->getSingleResult()) {
+        if (!$user = $stmt->getOneOrNullResult()) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 

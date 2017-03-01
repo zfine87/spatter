@@ -1,17 +1,21 @@
 <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded" style="margin-bottom:2vh;">
     <div class="container">
         <a class="navbar-brand" href="#">Spatter... Twitter, but Worse!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav mr-auto">
             </ul>
 
-            <form class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <a class="navbar-brand" href="#">{{ app.user.username }}</a>
                     <a class="btn btn-primary" href="{{ path('users_logout') }}" role="button">Logout</a>
                 {% else %}
-                    <a class="btn btn-primary" href="/auth/login" role="button">Login</a>
+                    <a class="btn btn-primary mr-2" href="/auth/login" role="button">Login</a>
                     <a class="btn btn-primary" href="/auth/register" role="button">Register</a>
                 {% endif %}
             </form>

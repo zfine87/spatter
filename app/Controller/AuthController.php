@@ -3,18 +3,37 @@
 use App\Models\User;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class AuthController extends Controller {
 
+    /**
+     * Render login view
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return mixed
+     */
     public function showLoginForm(Application $app, Request $request){
 
-        return $app['twig']->render('Auth/login.html.twig', array(
-            'last_username' => $app['session']->get('_security.last_username'),
-            'error'         => $app['security.last_error']($request),
-        ));
+        $user = new User();
+        $form = $app['form.factory']->create('App\\Form\\LoginType', $user);
+
+        $form->handleRequest($request);
+
+        return $app['twig']->render('auth/login.html.twig',
+            ['form'  => $form->createView()]
+        );
     }
 
+    /**
+     * Register a user
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function registerUser(Application $app, Request $request)
     {
         // 1) build the form
@@ -34,13 +53,24 @@ class AuthController extends Controller {
             $app['orm.em']->persist($user);
             $app['orm.em']->flush();
 
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
+            // create and store an authenticated token so users don't have to login after registration
+            $token = new UsernamePasswordToken(
+                $user,
+                $user->getPassword(),
+                'main',                 //key of the firewall you are trying to authenticate
+                $user->getRoles()
+            );
+            $app['security.token_storage']->setToken($token);
+
+            //Update session with new user authenticated token
+            $app['session']->set('_security_main', serialize($token));
+            $app['session']->save();
+
             return $this->redirect('/');
         }
 
         return $app['twig']->render(
-            'Auth/register.html.twig',
+            'auth/register.html.twig',
             ['form'  => $form->createView()]
         );
     }

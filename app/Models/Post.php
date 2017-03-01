@@ -32,6 +32,20 @@ class Post implements \Serializable
 
 
     /**
+     * @Column(type="datetime", nullable=false)
+     * @Version
+     * @Assert\NotBlank()
+     */
+    private $created_at;
+
+    /**
+     * @Column(type="datetime", nullable=false)
+     * @Version
+     * @Assert\NotBlank()
+     */
+    private $updated_at;
+
+    /**
      * Many Posts have One User.
      * @ManyToOne(targetEntity="User", inversedBy="posts")
      * @JoinColumn(name="user_id", referencedColumnName="id")
@@ -64,13 +78,48 @@ class Post implements \Serializable
         $this->body = $body;
     }
 
+    /**
+     * Post created_at accessor
+     */
+    public function getcreated_at()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Post created_at mutator
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * Post updated_at accessor
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Post updated_at mutator
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+    }
+
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
         return serialize(array(
             $this->id,
             $this->user_id,
-            $this->body
+            $this->body,
+            $this->created_at,
+            $this->updated_at
         ));
     }
 
@@ -80,7 +129,9 @@ class Post implements \Serializable
         list (
             $this->id,
             $this->user_id,
-            $this->body
+            $this->body,
+            $this->created_at,
+            $this->updated_at
             ) = unserialize($serialized);
     }
 }

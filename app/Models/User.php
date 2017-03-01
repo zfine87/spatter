@@ -48,6 +48,21 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
+     * @Column(type="datetime", nullable=false)
+     * @Version
+     * @Assert\NotBlank()
+     */
+    private $created_at;
+
+    /**
+     * @Column(type="datetime", nullable=false)
+     * @Version
+     * @Assert\NotBlank()
+     */
+    private $updated_at;
+
+
+    /**
      * @Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -129,6 +144,38 @@ class User implements UserInterface, \Serializable
     public function getRoles()
     {
         return ['ROLE_USER'];
+    }
+
+    /**
+     * Post created_at accessor
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Post created_at mutator
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * Post updated_at accessor
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Post updated_at mutator
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
     }
 
     public function eraseCredentials()

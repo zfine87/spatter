@@ -3,7 +3,7 @@
 {% extends "app.html.twig" %}
 
 {% block content %}
-    <div class="d-flex flex-column align-items-center fl" style="height:100vh;">
+    <div class="d-flex flex-column align-items-center" style="height:100vh;">
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <div class="mb-3 p-2 card card-inverse w-75" style="background-color: #333; border-color: #333;">
                 <form action="/post/" method="post">
@@ -22,6 +22,9 @@
                     <div class="card-block">
                         <h3 class="card-title">{{ app.user.username }} said...</h3>
                         <p class="card-text">{{ post.body }}</p>
+                    </div>
+                    <div class="card-footer">
+                        {{ post.created_at.format('M d, H:i A') }}
                     </div>
                 </div>
             {% endfor %}
