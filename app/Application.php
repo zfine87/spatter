@@ -3,7 +3,6 @@
 use App\Subscriber\TimestampSubscriber;
 use Silex;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
-use Doctrine\ORM\Events;
 use Silex\Provider\FormServiceProvider;
 
 class Application extends Silex\Application {
@@ -23,17 +22,23 @@ class Application extends Silex\Application {
      */
     function registerProviders(){
 
+        $this->register(new Silex\Provider\MonologServiceProvider(), array(
+            'monolog.logfile' => __DIR__.'/development.log',
+        ));
+
         //Register database service providers
-        $this->register(new Silex\Provider\DoctrineServiceProvider(), array(
-            'db.options' => array(
+        $this->register(new Silex\Provider\DoctrineServiceProvider(), [
+            'db.options' => [
                 'dbname' => 'spatter',
                 'user' => 'root',
                 'password' => 'Samps0n1$',
                 'host' => 'localhost',
                 'port' => '3306',
-                'driver' => 'pdo_mysql',
-            ),
-        ));
+                'driver' => 'pdo_mysql'
+            ]
+        ]);
+
+        $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
 
         $this->register(new DoctrineOrmServiceProvider, array(
             'orm.em.options' => array(
@@ -49,24 +54,33 @@ class Application extends Silex\Application {
             )
         ));
 
-        $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
+
 
         //Register general use service providers
+        $this->register(new Silex\Provider\CsrfServiceProvider());
         $this->register(new Silex\Provider\LocaleServiceProvider());
         $this->register(new Silex\Provider\ValidatorServiceProvider());
         $this->register(new Silex\Provider\TranslationServiceProvider(), array(
             'translator.domains' => array(),
         ));
         $this->register(new FormServiceProvider());
-        $this->register(new Silex\Provider\SessionServiceProvider());
 
+        $this->register(new Silex\Provider\SessionServiceProvider(), [
+            'session.test' => getenv('env') ? true : false
+        ]);
 
-        //Register security provider and extras
-        $this['app.token_authenticator'] = function ($this) {
-            return new Security\TokenAuthenticator($this['security.encoder_factory']);
-        };
         $this->register(new Silex\Provider\SecurityServiceProvider());
         $this->register(new Silex\Provider\RememberMeServiceProvider());
+
+        //Register security provider and extras
+        $this['app.login_authenticator'] = function ($this) {
+            return new Security\LoginAuthenticator($this['security.encoder_factory']);
+        };
+
+        //Encode user passwords with Bcrypt
+        $this['security.password_encoder'] = function ($this) {
+            return $this['security.encoder.bcrypt'];
+        };
 
         //Whole site is behind user auth wall except login and register
         $this['security.firewalls'] = array(
@@ -80,28 +94,28 @@ class Application extends Silex\Application {
             ],
             'main' => [
                 'pattern' => '^/',
-                'form'    => ['login_path' => '/auth/login', 'check_path' => '/users/login'],
-                'logout'  => ['logout_path' => '/users/logout', 'target_url' => '/'],
+                'form'    => ['login_path' => '/auth/login', 'check_path' => '/users/login', 'default_target_path' => '/', 'always_use_default_target_path' => true],
+                'logout'  => ['logout_path' => '/users/logout', 'target_url' => '/auth/login'],
                 'users'   => function () {
                     return new Providers\UserProvider($this['orm.em']);
                 },
-                'remember_me' => array(
+                'guard' => [
+                    'authenticators' => [
+                        'app.login_authenticator'
+                    ]
+                ],
+                'remember_me' => [
                     'key'                => 'zWmslk4Zv00rDIVv',
                     'always_remember_me' => true
-                )
+                ]
             ]
         );
 
-        //Encode user passwords with Bcrypt
-        $this['security.password_encoder'] = function ($this) {
-            return $this['security.encoder.bcrypt'];
-        };
 
         //Register Twig view folder/provider
         $this->register(new Silex\Provider\TwigServiceProvider(), array(
             'twig.path' => __DIR__.'/../public/views',
         ));
-
     }
 
     /**
