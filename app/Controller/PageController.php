@@ -23,7 +23,7 @@ class PageController extends Controller {
 
         $user = $app['security.token_storage']->getToken()->getUser();
 
-        return $app['twig']->render('index.html.twig', [
+        return $app['twig']->render('pages/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user
         ]);

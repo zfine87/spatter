@@ -1,6 +1,7 @@
 <?php namespace App\Controller\Provider;
 
 use Silex\Api\ControllerProviderInterface;
+use Symfony\Component\BrowserKit\Request;
 use Silex\Application;
 
 class Auth implements ControllerProviderInterface{
@@ -20,6 +21,7 @@ class Auth implements ControllerProviderInterface{
 
         $auth->get("/register", 'App\\Controller\\AuthController::registerUser');
         $auth->post("/register", 'App\\Controller\\AuthController::registerUser');
+
         return $auth;
     }
 }

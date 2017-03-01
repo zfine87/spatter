@@ -12,15 +12,12 @@ class AuthController extends Controller {
      * Render login view
      *
      * @param Application $app
-     * @param Request $request
      * @return mixed
      */
-    public function showLoginForm(Application $app, Request $request){
+    public function showLoginForm(Application $app){
 
         $user = new User();
         $form = $app['form.factory']->create('App\\Form\\LoginType', $user);
-
-        $form->handleRequest($request);
 
         return $app['twig']->render('auth/login.html.twig',
             ['form'  => $form->createView()]
@@ -40,11 +37,11 @@ class AuthController extends Controller {
         $user = new User();
         $form = $app['form.factory']->create('App\\Form\\UserType', $user);
 
-        // 2) handle the submit (will only happen on POST)
+        // 2) handle the submit if it's a POST
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 3) Encode the password (you could also do this via Doctrine listener)
+            // 3) Encode the password
             $password = $app['security.encoder_factory']->getEncoder($user)
                 ->encodePassword($user->getPlainPassword(), $user->getSalt());
             $user->setPassword($password);
@@ -53,11 +50,12 @@ class AuthController extends Controller {
             $app['orm.em']->persist($user);
             $app['orm.em']->flush();
 
-            // create and store an authenticated token so users don't have to login after registration
+
+            // create and store an authenticated token for auto-login
             $token = new UsernamePasswordToken(
                 $user,
                 $user->getPassword(),
-                'main',                 //key of the firewall you are trying to authenticate
+                'main',
                 $user->getRoles()
             );
             $app['security.token_storage']->setToken($token);
