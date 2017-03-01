@@ -1,33 +1,44 @@
 <?php namespace App\Security;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-class LoginAuthenticator extends AbstractGuardAuthenticator
+class LoginAuthenticator extends AbstractFormLoginAuthenticator
 {
     private $encoderFactory;
+
 
     public function __construct(EncoderFactoryInterface $encoderFactory)
     {
         $this->encoderFactory = $encoderFactory;
     }
 
+    protected function getLoginUrl()
+    {
+        return '/auth/login';
+    }
+
+
     public function getCredentials(Request $request)
     {
-        if($username = $request->request->get('username') && $secret = $request->request->get('password')) {
-            return array(
-                'username' => $username,
-                'secret' => $secret,
-            );
+        if( $request->request->get('username') && $request->request->get('password') ) {
+
+            return [
+                'username' => $request->request->get('username'),
+                'secret' => $request->request->get('password')
+            ];
+        } else {
+            return;
         }
 
-        return;
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
@@ -51,20 +62,18 @@ class LoginAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // on success, let the request continue
-        return;
+        return new RedirectResponse('/');
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $data = array(
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+        if ($request->getSession() instanceof SessionInterface) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
 
-            // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
-        );
+        $url = $this->getLoginUrl();
 
-        return new JsonResponse($data, 403);
+        return new RedirectResponse($url);
     }
 
     /**
@@ -72,12 +81,9 @@ class LoginAuthenticator extends AbstractGuardAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        $data = array(
-            // you might translate this message
-            'message' => 'Authentication Required',
-        );
+        $url = $this->getLoginUrl();
 
-        return new JsonResponse($data, 401);
+        return new RedirectResponse($url);
     }
 
     public function supportsRememberMe()
