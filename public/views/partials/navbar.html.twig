@@ -1,3 +1,5 @@
+{# public/views/partials/navbar.html.twig #}
+
 <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded" style="margin-bottom:2vh;">
     <div class="container">
         <a class="navbar-brand" href="#">Spatter... Twitter, but Worse!</a>
@@ -5,11 +7,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav mr-auto">
             </ul>
-
             <form class="form-inline my-2">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <a class="navbar-brand" href="#">{{ app.user.username }}</a>

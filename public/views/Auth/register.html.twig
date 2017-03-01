@@ -1,4 +1,5 @@
-{% form_theme form 'form/fields.html.twig' %}
+{# public/views/auth/register.html.twig #}
+{% form_theme form 'forms/fields.html.twig' %}
 
 {% extends "app.html.twig" %}
 
@@ -8,18 +9,15 @@
         {{ form_start(form) }}
         {{ form_errors(form) }}
         <div class="card m-auto" style="width:250px;">
+            <div class="card-header">Register</div>
             <div class="card-block">
                 {{ form_row(form.username) }}
                 {{ form_row(form.email) }}
                 {{ form_row(form.plainPassword.first) }}
                 {{ form_row(form.plainPassword.second) }}
-                <button type="submit">Register!</button>
-
+                <button type="submit" class="btn btn-primary" id="register-submit">Start Spatting!</button>
             </div>
         </div>
         {{ form_end(form) }}
     </div>
-
-
-
 {%  endblock %}

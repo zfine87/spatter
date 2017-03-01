@@ -1,0 +1,38 @@
+{# public/views/form/fields.html.twig #}
+
+{# Add proper BS4 formatting #}
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+            {{ form_label(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+
+{# Add vue.js hook #}
+{%- block textarea_widget -%}
+    <textarea {{ block('widget_attributes') }} class="form-control" rows="3" v-model="test">{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+
+{# Add proper BS4 formatting #}
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <div class="alert alert-danger" role="alert" id="form-errors">
+            <h3>There have been a some errors:</h3>
+            <ul>
+                {%- for error in errors -%}
+                    <li>{{ error.message }}</li>
+                {%- endfor -%}
+            </ul>
+        </div>
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" class="form-control" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}

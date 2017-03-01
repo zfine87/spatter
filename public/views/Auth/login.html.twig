@@ -1,20 +1,21 @@
+{# public/views/auth/login.html.twig #}
+{% form_theme form 'forms/fields.html.twig' %}
+
 {% extends "app.html.twig" %}
 
 
 {% block content %}
     <div class="d-flex flex-column align-items-center">
-
-
         {{ form_start(form) }}
-        {{ form_errors(form) }}
-        <div class="card m-auto" style="width:250px;">
-            <h4 class="card-title">Login!</h4>
-            <div class="card-block">
-                {{ form_row(form.username) }}
-                {{ form_row(form.password) }}
-                <button type="submit" id="login-submit">Register!</button>
+            {{ form_errors(form) }}
+            <div class="card m-auto" style="width:250px;">
+                <h4 class="card-header">Login!</h4>
+                <div class="card-block">
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.password) }}
+                    <button type="submit" class="btn btn-primary" id="login-submit">Start Spatting!</button>
+                </div>
             </div>
-        </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}
