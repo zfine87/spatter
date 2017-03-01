@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Spatter | Twitter, but worse!</title>
+        <link rel="stylesheet" href="../js/styles.css">
+    </head>
+    <body>
+        {% include('partials/navbar.html.twig') %}
+
+        <div class="container" id="main-body" style="text-align: center;">
+
+            {% include('partials/errors.html.twig') %}
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+
+        <script type="text/javascript" src="../js/bundle.js"></script>
+    </body>
+</html>

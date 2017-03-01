@@ -1,0 +1,35 @@
+{
+  "browser": {
+    "vue": "vue/dist/vue.common"
+  },
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "lodash": "^4.16.2",
+    "semantic-ui": "^2.2.7",
+    "vue": "^2.1.10",
+    "vue-resource": "^1.1.0",
+    "vue-typeahead": "^2.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-plugin-transform-regenerator": "^6.22.0",
+    "babel-preset-es2017": "^6.22.0",
+    "css-loader": "^0.26.2",
+    "extract-text-webpack-plugin": "^2.0.0",
+    "webpack": "^2.2.1"
+  },
+  "name": "spatter",
+  "description": "[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework) [![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework) [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework) [![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework) [![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC"
+}

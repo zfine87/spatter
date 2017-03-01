@@ -1,0 +1,21 @@
+{# app/Resources/views/author/validation.html.twig #}
+
+{# Handle individual error #}
+{% if error is defined and error != null %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Oops!</strong> The follow error has occurred: {{ error }}
+    </div>
+
+{% endif %}
+
+{# Handle error list #}
+{% if errors is defined %}
+    <div class="alert alert-danger" role="alert">
+        <h3>There have been a couple errors:</h3>
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

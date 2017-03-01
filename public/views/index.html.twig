@@ -1,0 +1,30 @@
+{% form_theme form 'form/fields.html.twig' %}
+
+{% extends "app.html.twig" %}
+
+{% block content %}
+    <div class="d-flex flex-column align-items-center fl" style="height:100vh;">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="mb-3 p-2 card card-inverse w-75" style="background-color: #333; border-color: #333;">
+                <form action="/post/" method="post">
+                    {{ form_row(form.body) }}
+                    <div class="d-flex flex-row justify-content-sm-between">
+
+                        <button v-if="bodyLength <= 140" type="submit" class="btn btn-primary">Talk to Yourself</button>
+                        <button v-else type="submit" class="btn btn-danger" disabled>You are saying too much!</button>
+                        <h4 :style="{color: bodyLength > 140 ? 'red' : ''}">${ bodyLength } / 140</h4>
+                    </div>
+                </form>
+            </div>
+
+            {% for post in user.posts|reverse %}
+                <div class="mb-3 p-2 card card-inverse w-75" style="background-color: #333; border-color: #333;">
+                    <div class="card-block">
+                        <h3 class="card-title">{{ app.user.username }} said...</h3>
+                        <p class="card-text">{{ post.body }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
