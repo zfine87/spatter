@@ -12,8 +12,8 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', TextareaType::class,
-                ['constraints' => [new Assert\Length(['max' => 140])]]
+            ->setAction('/post/')
+            ->add('body', TextareaType::class
             )
         ;
     }

@@ -14,9 +14,7 @@ class LoginType extends AbstractType
     {
         $builder
             ->setAction('/users/login')
-            ->add('username', TextType::class,
-                ['constraints' => [new Assert\Length(['min' => 4])], 'error_bubbling' => true])
-
+            ->add('username', TextType::class, ['error_bubbling' => true])
             ->add('password', PasswordType::class,
                 ['constraints' => [new Assert\NotBlank()],'error_bubbling' => true]
             )
@@ -28,5 +26,13 @@ class LoginType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => User::class,
         ));
+    }
+
+    /**
+     * This will remove formTypeName from the form
+     * @return null
+     */
+    public function getBlockPrefix() {
+        return null;
     }
 }
