@@ -4,6 +4,7 @@ use AppBundle\Subscriber\TimestampSubscriber;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex;
 use Silex\Provider\FormServiceProvider;
+use Symfony\Component\Yaml\Yaml;
 
 class Application extends Silex\Application {
 
@@ -12,7 +13,10 @@ class Application extends Silex\Application {
      */
     function __construct(){
         parent::__construct();
+
+        //If this ever goes to production turn this off!
         $this['debug'] = true;
+
         $this->registerProviders();
         $this->mountControllers();
     }
@@ -23,63 +27,43 @@ class Application extends Silex\Application {
     function registerProviders(){
 
         //Monologger
-        $this->register(new Silex\Provider\MonologServiceProvider(), array(
-            'monolog.logfile' => __DIR__.'../../var/Logs/development.log',
-        ));
+        $this->register(new Silex\Provider\MonologServiceProvider(), [
+            'monolog.logfile' => __DIR__.'../../../var/Logs/development.log',
+        ]);
 
         //Register database service providers
-
-        if(getenv("CLEARDB_DATABASE_URL")) {
-            $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-            $this->register(new Silex\Provider\DoctrineServiceProvider(), [
-                'db.options' => [
-                    'dbname' => substr($url["path"], 1),
-                    'user' => $url["user"],
-                    'password' => $url["pass"],
-                    'host' => $url["host"],
-                    'port' => $url["port"],
-                    'driver' => 'pdo_mysql'
-                ]
-            ]);
-        } else {
-            $this->register(new Silex\Provider\DoctrineServiceProvider(), [
-                'db.options' => [
-                    'dbname' => 'spatter',
-                    'user' => 'root',
-                    'password' => 'Samps0n1$',
-                    'host' => 'localhost',
-                    'port' => '3306',
-                    'driver' => 'pdo_mysql'
-                ]
-            ]);
-        }
+        $this->register(new Silex\Provider\DoctrineServiceProvider(), [
+            'db.options' =>  Yaml::parse(
+                file_get_contents(__DIR__.'../Config/database.yml')
+            )
+        ]);
 
         //Add event subscriber for automatic timestamp creation
         $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
 
         //Add orm layer on top of doctrine
-        $this->register(new DoctrineOrmServiceProvider, array(
-            'orm.em.options' => array(
-                'mappings' => array(
+        $this->register(new DoctrineOrmServiceProvider, [
+            'orm.em.options' => [
+                'mappings' => [
                     // Using actual filesystem paths
-                    array(
+                    [
                         'type' => 'annotation',
                         'namespace' => 'AppBundle\Models',
                         'path' => __DIR__.'/Models',
                         'use_simple_annotation_reader' => true
-                    )
-                ),
-            )
-        ));
+                    ]
+                ],
+            ]
+        ]);
 
 
         //Register general use service providers
         $this->register(new Silex\Provider\CsrfServiceProvider());
         $this->register(new Silex\Provider\LocaleServiceProvider());
         $this->register(new Silex\Provider\ValidatorServiceProvider());
-        $this->register(new Silex\Provider\TranslationServiceProvider(), array(
-            'translator.domains' => array(),
-        ));
+        $this->register(new Silex\Provider\TranslationServiceProvider(), [
+            'translator.domains' => [],
+        ]);
         $this->register(new FormServiceProvider());
 
 
@@ -132,9 +116,9 @@ class Application extends Silex\Application {
         );
 
         //Register Twig view folder/provider
-        $this->register(new Silex\Provider\TwigServiceProvider(), array(
+        $this->register(new Silex\Provider\TwigServiceProvider(), [
             'twig.path' => __DIR__.'/../../app/Resources/views',
-        ));
+        ]);
     }
 
     /**

@@ -1,0 +1,8 @@
+##MYSQL CONFIG INFO
+
+dbname: spatter
+host: localhost
+user: root
+password: Samps0n1$
+port: 3306
+driver: pdo_mysql

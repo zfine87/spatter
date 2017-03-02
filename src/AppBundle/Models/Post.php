@@ -29,14 +29,16 @@ class Post implements \Serializable
 
 
     /**
-     * @Column(name="created_at", type="datetime", nullable=TRUE)
+     * @Column(name="created_at", type="datetime")
      * @Version
+     * @Assert\NotBlank()
      */
     private $createdAt;
 
     /**
-     * @Column(name="updated_at", type="datetime", nullable=TRUE)
+     * @Column(name="updated_at", type="datetime")
      * @Version
+     * @Assert\NotBlank()
      */
     private $updatedAt;
 
