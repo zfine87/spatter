@@ -8,19 +8,16 @@ require_once "vendor/autoload.php";
 // Create a simple "default" Doctrine ORM configuration for Annotations
 $isDevMode = true;
 $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/app/Models"), $isDevMode);
-// or if you prefer yaml or XML
-//$config = Setup::createXMLMetadataConfiguration(array(__DIR__."/config/xml"), $isDevMode);
-//$config = Setup::createYAMLMetadataConfiguration(array(__DIR__."/config/yaml"), $isDevMode);
 
-// database configuration parameters
+// Database Configs
 $conn = array(
     'dbname' => 'spatter',
     'user' => 'root',
-    'password' => 'Samps0n1$',
+    'password' => 'password',
     'host' => 'localhost',
     'port' => '3306',
     'driver' => 'pdo_mysql',
 );
 
-// obtaining the entity manager
+// Get the entity manager
 $entityManager = EntityManager::create($conn, $config);

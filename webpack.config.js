@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
 
 var path = require('path');
 

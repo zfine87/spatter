@@ -31,7 +31,7 @@ class Application extends Silex\Application {
             'db.options' => [
                 'dbname' => 'spatter',
                 'user' => 'root',
-                'password' => 'Samps0n1$',
+                'password' => 'password',
                 'host' => 'localhost',
                 'port' => '3306',
                 'driver' => 'pdo_mysql'
