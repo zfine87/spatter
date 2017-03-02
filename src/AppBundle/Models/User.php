@@ -45,13 +45,13 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @Column(name="created_at", type="datetime")
+     * @Column(name="created_at", type="datetime", nullable="TRUE")
      * @Version
      */
     private $createdAt;
 
     /**
-     * @Column(name="updated_at", type="datetime")
+     * @Column(name="updated_at", type="datetime", nullable="TRUE")
      * @Version
      */
     private $updatedAt;
