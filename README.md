@@ -8,11 +8,12 @@ Why start spatting? It's a nice foundation to do other cool things, like show-of
 
 1. Clone this repository
 2. Create a MySQL schema named spatter and set your database username/password to any account you want that has full access
-3. Run composer install
-4. Run composer update
-5. Run vendor/bin/doctrine orm:schema-tool:create
-6. Run composer dump-autoload -o
-7. Run php -S localhost:8888 -t public
+3. Run `composer install`
+4. Run `composer update`
+5. Run `vendor/bin/doctrine orm:schema-tool:create`
+6. Run `composer dump-autoload -o`
+7. Run `php -S localhost:8888 -t public`
+
 Go to localhost:8888 and start spatting!
 
 
