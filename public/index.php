@@ -13,7 +13,6 @@ if(!getenv('env')) {
     }
 }
 
-
 //Start App
 $app = new AppBundle\Application();
 

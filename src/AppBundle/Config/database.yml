@@ -3,6 +3,6 @@
 dbname: spatter
 host: localhost
 user: root
-password: Samps0n1$
+password: password
 port: 3306
 driver: pdo_mysql
