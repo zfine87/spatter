@@ -7,7 +7,7 @@ Why start spatting? It's a nice foundation to do other cool things, like show-of
 0. Have PHP 5.6 installed (it might work on PHP 7 but thats not a guarentee!) and also have Composer
 
 1. Clone this repository
-2. Create a MySQL schema named spatter and set your database username/password to any account you want that has full access
+2. Create a MySQL schema named spatter and update the necessary db config fields in bootstrap.php and app/Application.php with your user information
   
   #Run All the following commands from the project root
 3. Run `composer install`
