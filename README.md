@@ -7,9 +7,10 @@ Why start spatting? It's a nice foundation to do other cool things, like show-of
 0. Have PHP 5.6 installed (it might work on PHP 7 but thats not a guarantee!) and also have Composer
 
 1. Clone this repository
-2. Create a MySQL schema named spatter and update the necessary db config fields in bootstrap.php and app/Application.php with your user information
+2. Create a MySQL schema named spatter and update the necessary fields in src/AppBundle/Config/database.yml
   
-  #Run All the following commands from the project root
+Run All the following commands from the project root
+
 3. Run `composer install`
 4. Run `composer update`
 5. Run `vendor/bin/doctrine orm:schema-tool:create`
