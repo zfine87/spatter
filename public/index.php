@@ -15,7 +15,7 @@ if(!getenv('env')) {
 
 
 //Start App
-$app = new App\Application();
+$app = new AppBundle\Application();
 
 $app->run();
 

@@ -1,0 +1,11 @@
+{# public/views/forms/post.html.twig #}
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.body) }}
+    <div class="d-flex flex-row justify-content-between">
+        <button v-if="bodyLength <= 140" type="submit" class="btn btn-primary" id="post-submit">Talk to Yourself</button>
+        <button v-else type="submit" class="btn btn-danger" disabled>Talk a little less!</button>
+        <h5 :style="{color: bodyLength > 140 ? 'red' : ''}">${ bodyLength } / 140</h5>
+    </div>
+{{ form_end(form) }}
