@@ -1,7 +1,4 @@
-<?php
-
-// src/AppBundle/Entity/User.php
-namespace App\Models;
+<?php namespace App\Models;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -48,18 +45,18 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @Column(type="datetime", nullable=false)
+     * @Column(name="created_at", type="datetime", nullable=false)
      * @Version
      * @Assert\NotBlank()
      */
-    private $created_at;
+    private $createdAt;
 
     /**
-     * @Column(type="datetime", nullable=false)
+     * @Column(name="updated_at", type="datetime", nullable=false)
      * @Version
      * @Assert\NotBlank()
      */
-    private $updated_at;
+    private $updatedAt;
 
 
     /**
@@ -136,8 +133,6 @@ class User implements UserInterface, \Serializable
 
     public function getSalt()
     {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
         return null;
     }
 
@@ -147,37 +142,39 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Post created_at accessor
+     * Post createdAt accessor
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * User created_at mutator
-     * @param \DateTime $created_at
+     * User createdAt mutator
+     *
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt(\DateTime $created_at)
+    public function setCreatedAt(\DateTime $createdAt)
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
 
     /**
-     * Post updated_at accessor
+     * User updatedAt accessor
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * User updated_at mutator
-     * @param \DateTime $update_at
+     * User updatedAt mutator
+     *
+     * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt(\DateTime $updated_at)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
     }
 
     public function eraseCredentials()
@@ -191,7 +188,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->email,
             $this->username,
-            $this->password,
+            $this->password
         ));
     }
 
@@ -202,7 +199,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->email,
             $this->username,
-            $this->password,
+            $this->password
             ) = unserialize($serialized);
     }
 }

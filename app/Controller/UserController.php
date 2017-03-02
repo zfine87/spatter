@@ -2,35 +2,56 @@
 
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserController {
 
-    public function index(Application $app){
-        return $app['twig']->render('app.html.twig');
-    }
+    /**
+     * This is the User Controller, there is nothing happening here at the moment,
+     * but it is inevitable that these routes will get filled out so I added the boilerplate
+     * for a basic RESTful controller
+     */
 
-    public function edit(Application $app, $id){
-        // show edit form
-    }
 
-    public function show(Application $app, $id){
+    /**
+     * Show all users (maybe make admin firewall for this?)
+     *
+     */
+    public function index(){}
 
-        $user = $app['orm.em']->find('App\Models\User', $id);
+    /**
+     * Load the edit form for a user
+     *
+     * @param $id
+     */
+    public function edit($id){}
 
-        return $app['twig']->render('index.html.twig', [
-            'user'  => $user,
-        ]);
-    }
+    /**
+     * Show posts for a specific user (or something else if you want)
+     *
+     * @param $id
+     */
+    public function show($id){}
 
-    public function store(){
-        // create a new user, using POST method
-    }
+    /**
+     * Create a new user and store them in DB
+     *
+     * @param Request $request
+     */
+    public function store(Request $request){}
 
-    public function update($id){
-        // update the user #id, using PUT method
-    }
+    /**
+     * Update a users information
+     *
+     * @param Request $request
+     * @param $id
+     */
+    public function update(Request $request, $id){}
 
-    public function destroy($id){
-        // delete the user #id, using DELETE method
-    }
+    /**
+     * Delete a user
+     *
+     * @param $id
+     */
+    public function destroy($id){}
 }

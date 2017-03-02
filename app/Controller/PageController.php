@@ -7,22 +7,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PageController extends Controller {
 
-    public function home(Application $app, Request $request){
+    /**
+     * Load the home page
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function home(Application $app){
 
+        // Prepare the form
         $post = new Post();
         $form = $app['form.factory']->create('App\\Form\\PostType', $post);
-        // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            $app['orm.em']->persist($post);
-            $app['orm.em']->flush();
-
-            return $this->redirect('/');
-        }
-
+        // Load user
         $user = $app['security.token_storage']->getToken()->getUser();
 
+        // Render view
         return $app['twig']->render('pages/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user

@@ -32,18 +32,18 @@ class Post implements \Serializable
 
 
     /**
-     * @Column(type="datetime", nullable=false)
+     * @Column(name="created_at", type="datetime", nullable=false)
      * @Version
      * @Assert\NotBlank()
      */
-    private $created_at;
+    private $createdAt;
 
     /**
-     * @Column(type="datetime", nullable=false)
+     * @Column(name="updated_at", type="datetime", nullable=false)
      * @Version
      * @Assert\NotBlank()
      */
-    private $updated_at;
+    private $updatedAt;
 
     /**
      * Many Posts have One User.
@@ -72,6 +72,8 @@ class Post implements \Serializable
 
     /**
      * Post body mutator
+     *
+     * @param $body
      */
     public function setBody($body)
     {
@@ -79,46 +81,52 @@ class Post implements \Serializable
     }
 
     /**
-     * Post created_at accessor
+     * Post createdAt accessor
      */
-    public function getcreated_at()
+    public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * Post created_at mutator
+     * Post createdAt mutator
+     *
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt(\DateTime $createdAt)
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
 
     /**
-     * Post updated_at accessor
+     * Post updatedAt accessor
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * Post updated_at mutator
+     * Post updatedAt mutator
+     *
+     * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt($updated_at)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
     }
 
 
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->id,
             $this->user_id,
-            $this->body
-        ));
+            $this->body,
+            $this->created_at,
+            $this->updated_at
+        ]);
     }
 
     /** @see \Serializable::unserialize() */

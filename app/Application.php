@@ -22,8 +22,9 @@ class Application extends Silex\Application {
      */
     function registerProviders(){
 
+        //Monologger
         $this->register(new Silex\Provider\MonologServiceProvider(), array(
-            'monolog.logfile' => __DIR__.'/development.log',
+            'monolog.logfile' => __DIR__.'/Logs/development.log',
         ));
 
         //Register database service providers
@@ -38,8 +39,10 @@ class Application extends Silex\Application {
             ]
         ]);
 
+        //Add event subscriber for automatic timestamp creation
         $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
 
+        //Add orm layer on top of doctrine
         $this->register(new DoctrineOrmServiceProvider, array(
             'orm.em.options' => array(
                 'mappings' => array(
@@ -55,7 +58,6 @@ class Application extends Silex\Application {
         ));
 
 
-
         //Register general use service providers
         $this->register(new Silex\Provider\CsrfServiceProvider());
         $this->register(new Silex\Provider\LocaleServiceProvider());
@@ -65,22 +67,24 @@ class Application extends Silex\Application {
         ));
         $this->register(new FormServiceProvider());
 
+
         $this->register(new Silex\Provider\SessionServiceProvider(), [
+            //Check if in test mode for PHPUnit
             'session.test' => getenv('env') ? true : false
         ]);
 
+        //Register security provider and extras
         $this->register(new Silex\Provider\SecurityServiceProvider());
         $this->register(new Silex\Provider\RememberMeServiceProvider());
+        $this['security.password_encoder'] = function ($this) {
+            return $this['security.encoder.bcrypt'];
+        };
 
-        //Register security provider and extras
+        //Register custom user login authenticator
         $this['app.login_authenticator'] = function ($this) {
             return new Security\LoginAuthenticator($this['security.encoder_factory']);
         };
 
-        //Encode user passwords with Bcrypt
-        $this['security.password_encoder'] = function ($this) {
-            return $this['security.encoder.bcrypt'];
-        };
 
         //Whole site is behind user auth wall except login and register
         $this['security.firewalls'] = array(
@@ -97,6 +101,7 @@ class Application extends Silex\Application {
                 'form'    => ['login_path' => '/auth/login', 'check_path' => '/users/login', 'default_target_path' => '/', 'always_use_default_target_path' => true],
                 'logout'  => ['logout_path' => '/users/logout', 'target_url' => '/auth/login'],
                 'users'   => function () {
+                    //Very important that users are passed ORM connection and not standard DB connection
                     return new Providers\UserProvider($this['orm.em']);
                 },
                 'guard' => [
@@ -111,7 +116,6 @@ class Application extends Silex\Application {
             ]
         );
 
-
         //Register Twig view folder/provider
         $this->register(new Silex\Provider\TwigServiceProvider(), array(
             'twig.path' => __DIR__.'/../public/views',
@@ -125,6 +129,8 @@ class Application extends Silex\Application {
         $this->mount('/',   new Controller\Provider\Page());
         $this->mount('/auth', new Controller\Provider\Auth());
         $this->mount('/post', new Controller\Provider\Post());
-        $this->mount('/users', new Controller\Provider\User());
+
+        //There is a users controller but it doesn't have a purpose yet, just uncomment to enable it
+        //$this->mount('/users', new Controller\Provider\User());
     }
 }

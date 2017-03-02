@@ -16,9 +16,11 @@ class AuthController extends Controller {
      */
     public function showLoginForm(Application $app){
 
+        //Prepare form
         $user = new User();
         $form = $app['form.factory']->create('App\\Form\\LoginType', $user);
 
+        //Render view
         return $app['twig']->render('auth/login.html.twig',
             ['form'  => $form->createView()]
         );
@@ -33,15 +35,15 @@ class AuthController extends Controller {
      */
     public function registerUser(Application $app, Request $request)
     {
-        // 1) build the form
+        // Build the form
         $user = new User();
         $form = $app['form.factory']->create('App\\Form\\UserType', $user);
 
-        // 2) handle the submit if it's a POST
+        // Handle the submit if it's a POST
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 3) Encode the password
+            // Encode the password
             $password = $app['security.encoder_factory']->getEncoder($user)
                 ->encodePassword($user->getPlainPassword(), $user->getSalt());
             $user->setPassword($password);
@@ -51,7 +53,7 @@ class AuthController extends Controller {
             $app['orm.em']->flush();
 
 
-            // create and store an authenticated token for auto-login
+            // Create and store an authenticated token for auto-login
             $token = new UsernamePasswordToken(
                 $user,
                 $user->getPassword(),
