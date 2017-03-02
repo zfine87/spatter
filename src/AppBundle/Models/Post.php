@@ -29,13 +29,13 @@ class Post implements \Serializable
 
 
     /**
-     * @Column(name="created_at", type="datetime", nullable="TRUE")
+     * @Column(name="created_at", type="datetime", nullable=TRUE)
      * @Version
      */
     private $createdAt;
 
     /**
-     * @Column(name="updated_at", type="datetime", nullable="TRUE")
+     * @Column(name="updated_at", type="datetime", nullable=TRUE)
      * @Version
      */
     private $updatedAt;
