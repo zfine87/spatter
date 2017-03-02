@@ -45,16 +45,14 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @Column(name="created_at", type="datetime", nullable=false)
+     * @Column(name="created_at", type="datetime")
      * @Version
-     * @Assert\NotBlank()
      */
     private $createdAt;
 
     /**
-     * @Column(name="updated_at", type="datetime", nullable=false)
+     * @Column(name="updated_at", type="datetime")
      * @Version
-     * @Assert\NotBlank()
      */
     private $updatedAt;
 
