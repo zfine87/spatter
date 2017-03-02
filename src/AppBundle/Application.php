@@ -28,16 +28,31 @@ class Application extends Silex\Application {
         ));
 
         //Register database service providers
-        $this->register(new Silex\Provider\DoctrineServiceProvider(), [
-            'db.options' => [
-                'dbname' => 'spatter',
-                'user' => 'root',
-                'password' => 'password',
-                'host' => 'localhost',
-                'port' => '3306',
-                'driver' => 'pdo_mysql'
-            ]
-        ]);
+
+        if(getenv("CLEARDB_DATABASE_URL")) {
+            $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+            $this->register(new Silex\Provider\DoctrineServiceProvider(), [
+                'db.options' => [
+                    'dbname' => substr($url["path"], 1),
+                    'user' => $url["user"],
+                    'password' => $url["pass"],
+                    'host' => $url["host"],
+                    'port' => $url["port"],
+                    'driver' => 'pdo_mysql'
+                ]
+            ]);
+        } else {
+            $this->register(new Silex\Provider\DoctrineServiceProvider(), [
+                'db.options' => [
+                    'dbname' => 'spatter',
+                    'user' => 'root',
+                    'password' => 'Samps0n1$',
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'driver' => 'pdo_mysql'
+                ]
+            ]);
+        }
 
         //Add event subscriber for automatic timestamp creation
         $this['db.event_manager']->addEventSubscriber(new TimestampSubscriber());
